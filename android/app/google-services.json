@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "328966659291",
+    "firebase_url": "https://tmi-connections.firebaseio.com",
+    "project_id": "tmi-connections",
+    "storage_bucket": "tmi-connections.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:328966659291:android:dfa32957c9284b095180fe",
+        "android_client_info": {
+          "package_name": "com.tmiconnections.tmi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "328966659291-9nh021k10se1att9orler4k02hdg2l2o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQ5nuwR9zJddEh9Xnj4Yq4ddi-gomWgG4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "328966659291-9nh021k10se1att9orler4k02hdg2l2o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
