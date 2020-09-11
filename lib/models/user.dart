@@ -3,19 +3,16 @@ import 'social.dart';
 
 class User {
 
+  User(this.name,{this.bio,this.reference,this.socials});
   String name;
   String bio;
-
-  List<Social> socials = List<Social>();
-
+  List<Social> socials = <Social>[];
   DocumentReference reference; 
 
   ////create a map. 
   /// key == 
-  User(this.name,{this.bio,this.reference,this.socials});
-
   factory User.fromSnapshot(DocumentSnapshot snapshot){
-    User newUser = User.fromJson(snapshot.data);
+    var newUser = User.fromJson(snapshot.data);
     newUser.reference = snapshot.reference;
     return newUser;
   }
@@ -24,7 +21,7 @@ class User {
 
   Map<String, dynamic> toJson() => _userToJson(this);
   @override
-  String toString() => "User<$name>";
+  String toString() => 'User<$name>';
 
 }
 
@@ -41,7 +38,7 @@ List<Social> _convertSocials(List socialMap){
   if (socialMap == null){
     return null;
   }
-  List<Social> socials = List<Social>();
+  var socials = <Social>[];
   socialMap.forEach((element) { 
     socials.add(Social.fromJson(element));
   });
@@ -59,7 +56,7 @@ List<Map<String, dynamic>> _SocialList(List<Social> socials){
   if (socials == null){
     return null;
   }
-  List<Map<String, dynamic>> socialMap = List<Map<String, dynamic>>();
+  var socialMap = <Map<String, dynamic>>[];
   socials.forEach((app) { 
     socialMap.add(app.toJson());
   });

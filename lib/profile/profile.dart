@@ -18,7 +18,7 @@ class _DebugUiPageState extends State<DebugUiPage> {
 
 String title = "Old Title";
 
-Widget _interests = Row(
+final Widget _interests = Row(
   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
   children: <Widget>[
     FaIcon(FontAwesomeIcons.planeDeparture),

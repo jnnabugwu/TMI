@@ -29,6 +29,11 @@ dependencies:
   geolocator: ^5.1.3
   intl: ^0.16.1
   flappy_search_bar: ^1.4.1
+  google_maps_flutter: ^0.5.30
+  flutter_google_places: ^0.2.6
+  json_serializable: ^3.3.0
+  google_maps_webservice: ^0.0.18
+  
   
 
 module:
@@ -40,6 +45,8 @@ module:
   cupertino_icons: ^0.1.2
 
 dev_dependencies:
+  pedantic: ^1.9.0
+  build_runner: ^1.10.0
   flutter_test:
     sdk: flutter
 

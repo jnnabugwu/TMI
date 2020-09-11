@@ -12,6 +12,8 @@ import 'package:tmi/models/friendrequest.dart';
 const BoldStyle = TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold); 
 
 class FriendRequestList extends StatefulWidget{
+  const FriendRequestList(this.id);
+  final String id;
   @override
   _FriendRequestListState createState() => _FriendRequestListState();
 
@@ -20,7 +22,7 @@ class FriendRequestList extends StatefulWidget{
 class _FriendRequestListState extends State<FriendRequestList> {
 
   final DataRepository repository = DataRepository();
-  final String id = "MeNG1QLuZcYBurrpvC55";
+  
   @override
   Widget build(BuildContext context){
     return _buildHome(context);
@@ -29,10 +31,16 @@ class _FriendRequestListState extends State<FriendRequestList> {
   Widget _buildHome(BuildContext context){
     return Scaffold(
       appBar: AppBar(
-        title: Text("Friend Request List")
+        title: Text('Friend Request List'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: (){
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: repository.getFriendRequestStream(id),
+        stream: repository.getFriendRequestStream(widget.id),
         builder: (context, snapshot)
         {
           if(!snapshot.hasData) return LinearProgressIndicator();
@@ -77,7 +85,7 @@ class _FriendRequestListState extends State<FriendRequestList> {
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 2.0)),
                   Text(
-                    friend.where + " @" + friend.when.toDate().toString(), 
+                    friend.where + ' @' + friend.when.toDate().toString(), 
                     style: const TextStyle(fontSize: 10.0)
                   ),
                 const Padding(
@@ -102,8 +110,8 @@ class _FriendRequestListState extends State<FriendRequestList> {
           ],
         ),
           onTap: () {
-            print("hello");
-            _choseFriend(friend);
+            print('hello');
+            _choseFriend(friend, friend.reference.documentID.toString());
             
           }
       ),
@@ -112,27 +120,27 @@ class _FriendRequestListState extends State<FriendRequestList> {
   }
 /// Create a Alertdialog button. 
 /// Does not disappear after 
-Future<DocumentReference> _choseFriend(Friend friend) async{
+Future<DocumentReference> _choseFriend(Friend friend, String friendId) async{
   return showDialog(
     context: context,
     barrierDismissible: true,
     builder: (BuildContext context){
         return AlertDialog(
-    title: const Text("Do you want to add contact?"),
+    title: const Text('Do you want to add contact?'),
     actions: <Widget>[
       FlatButton(onPressed: () {
-        print("Reject");
-        repository.deletleFriendRequest(friend, id);
+        print('Reject');
+        repository.deletleFriendRequest(friend, widget.id);
         Navigator.of(context).pop();
         }, 
-        child: Text("Reject", style: TextStyle(color: Colors.blue) ,),
+        child: Text('Reject', style: TextStyle(color: Colors.blue) ,),
       ),
       RaisedButton(onPressed: (){
-        repository.addFriend(friend, id);
-        repository.deletleFriendRequest(friend, id);
-        print("Accept");
+        repository.addFriend(friend, widget.id);
+        repository.deletleFriendRequest(friend, widget.id);
+        print('Accept');
         Navigator.of(context).pop();
-      },color: Colors.blue, child: Text("Accept"),
+      },color: Colors.blue, child: Text('Accept'),
       )
     ],
   );

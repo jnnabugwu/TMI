@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tmi/respository/dataRepository.dart';
 import 'package:tmi/models/user.dart';
-import 'package:tmi/profile/profile.dart';
+import 'package:tmi/profile/profilepage.dart';
 import 'package:tmi/database/profile_edit.dart';
 import 'package:tmi/profile/userDetails.dart';
 
@@ -26,7 +26,7 @@ class _HomeListState extends State<HomeList> {
   Widget _buildHome(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("TMI User"),
+        title: Text('TMI User'),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: repository.getStream(),
@@ -35,7 +35,7 @@ class _HomeListState extends State<HomeList> {
           if (!snapshot.hasData) return LinearProgressIndicator();
           return _buildList(context, snapshot.data.documents);
         } 
-        ), // TODO Add StreamBuilder
+        ), 
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _addUser();
@@ -47,27 +47,28 @@ class _HomeListState extends State<HomeList> {
   }
 
    void _addUser() {
-    AlertDialogWidget dialogWidget = AlertDialogWidget();
+    var dialogWidget = AlertDialogWidget();
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-              title: const Text("Add User"),
+              title: const Text('Add User'),
               content: dialogWidget,
               actions: <Widget>[
                 FlatButton(
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text("Cancel")),
+                    child: Text('Cancel')),
                 FlatButton(
                     onPressed: () {
-                      // TODO Add New User to repository
+                     
                       Navigator.of(context).pop();
-                      User newUser = User(dialogWidget.name);
+                      var newUser = User(dialogWidget.name);
                       repository.addUser(newUser);
+                      
                     },
-                    child: Text("Add")),
+                    child: Text('Add')),
               ]);
         });
   }
@@ -91,18 +92,19 @@ class _HomeListState extends State<HomeList> {
         child: InkWell(
           child: Row(
             children: <Widget>[
-              Expanded(child: Text(user.name == null ? "" : user.name, style: BoldStyle)) // TODO add pet name
+              Expanded(child: Text(user.name ?? '', style: BoldStyle)) // TODO add pet name
                // TODO Add pet type
             ],
           ),
           onTap: () {
-            _navigate(BuildContext context)  {
+          void _navigate(BuildContext context)  {
               Navigator.push(
+                
                   context,
                   MaterialPageRoute(
                     // builder: (context) => PetDetails(),
                      // TODO add pet
-                     builder: (context) => UserDetails(user),
+                     builder: (context) => ProfilePage(user),
                   ));
             }
 

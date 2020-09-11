@@ -13,6 +13,11 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="tmi"
         android:icon="@mipmap/ic_launcher">
+
+        <!-- TODO: Add your API key here-->
+        <meta-data android:name="com.google.android.geo.API_KEY" 
+                android:value="AIzaSyCs2X3gpmaK2F_1OHWPiu87pS1-hD--PNI"/>
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

@@ -13,12 +13,13 @@ class DataRepository {
 
   Future<DocumentReference> addUser(User user){
     return collection.add(user.toJson());
+    //when we set Unique id's we will change this. 
   }
 
   updateUser(User user) async {
     await collection.document(user.reference.documentID).updateData(user.toJson());
   }
-  ///FRIEND STREAMS
+  ///FRIEND Request STREAMS
     Stream<QuerySnapshot> getFriendRequestStream(String id) {
     return collection.document(id).collection('friendrequest').snapshots();
   }
@@ -33,6 +34,7 @@ class DataRepository {
 
     Future<DocumentReference> addFriend(Friend friend, String id){
     return collection.document(id).collection('friends_list').add(friend.toJson());
+    
   }
 
   ///Friend Stream 

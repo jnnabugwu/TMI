@@ -11,15 +11,17 @@ typedef DialogCallback = void Function();
 
 class UserDetails extends StatelessWidget {
 
-  final User user;
+ 
   const UserDetails(this.user);
-
+  
+  final User user;
+  
   @override
   Widget build(BuildContext context){
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text(user.name == null ? "" : user.name),
+          title: Text(user.name ?? ''),
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
@@ -33,9 +35,10 @@ class UserDetails extends StatelessWidget {
 }
 
 class UserDetailForm extends StatefulWidget {
-
-  final User user;
+  
   const UserDetailForm(this.user);
+  final User user;
+  
 
   // const UserDetailForm({Key key, this.user}) : super(key: key);
 
@@ -68,10 +71,10 @@ class _UserDetailFormState extends State<UserDetailForm> {
           children: <Widget>[
             SizedBox(height: 20.0),
             FormBuilderTextField(
-              attribute: "name",
+              attribute: 'name',
               initialValue: widget.user.name,
               decoration: textInputDecoration.copyWith(
-                hintText: 'Name', labelText: "Name"),
+                hintText: 'Name', labelText: 'Name'),
               validators: [
                 FormBuilderValidators.minLength(1),
                 FormBuilderValidators.required()
@@ -85,10 +88,10 @@ class _UserDetailFormState extends State<UserDetailForm> {
             ),
           SizedBox(height: 20.0),
           FormBuilderTextField(
-            attribute: "bio",
+            attribute: 'bio',
             initialValue: widget.user.bio,
             decoration: textInputDecoration.copyWith(
-              hintText: 'Bio', labelText: "Bio"
+              hintText: 'Bio', labelText: 'Bio'
             ),
             onChanged: (val){
               setState(() {
@@ -97,7 +100,7 @@ class _UserDetailFormState extends State<UserDetailForm> {
             },
           ),
             FormBuilderCustomField(
-              attribute: "socials",
+              attribute: 'socials',
               formField: FormField(
                 enabled: true,
                 builder: (FormFieldState<dynamic> field) {
@@ -105,7 +108,7 @@ class _UserDetailFormState extends State<UserDetailForm> {
                     children: <Widget>[
                       SizedBox(height: 6.0),
                       Text(
-                        "Socials",
+                        'Socials',
                         style: TextStyle(fontSize: 16.0),
                       ),
                       ConstrainedBox(
@@ -145,7 +148,7 @@ class _UserDetailFormState extends State<UserDetailForm> {
                   Navigator.of(context).pop();
                 },
                 child: Text(
-                  "Cancel",
+                  'Cancel',
                   style: TextStyle(color: Colors.white, fontSize: 12.0), 
                 )),
               MaterialButton(
@@ -159,7 +162,7 @@ class _UserDetailFormState extends State<UserDetailForm> {
                   }
                 },
                 child: Text(
-                  "Update",
+                  'Update',
                   style: TextStyle(color: Colors.white, fontSize:12.0),
                 ),
               )
@@ -181,7 +184,8 @@ class _UserDetailFormState extends State<UserDetailForm> {
         ),
         Text(social.username),
         Checkbox(
-          value: social.permission == null ? false : social.permission,
+          /// social.permission ?? false is the same ass social.permission == null ? false : social.permission
+          value: social.permission ?? false,
           onChanged: (newValue){
             social.permission = newValue;
           }
@@ -193,13 +197,13 @@ class _UserDetailFormState extends State<UserDetailForm> {
   void _addSocial(User user, DialogCallback callback){
     String app;
     String username;
-    bool permission = false;
+    var permission = false;
     final _formKey = GlobalKey<FormBuilderState>();
     showDialog(
       context: context,
       builder: (BuildContext context){
         return AlertDialog(
-          title: const Text("Socials"),
+          title: const Text('Socials'),
           content: SingleChildScrollView(
             child: FormBuilder(
               key: _formKey,
@@ -207,14 +211,14 @@ class _UserDetailFormState extends State<UserDetailForm> {
               child: Column(
                 children: <Widget>[
                   FormBuilderTextField(
-                    attribute: "App",
+                    attribute: 'App',
                     validators: [
                       FormBuilderValidators.minLength(1),
                       FormBuilderValidators.required()
                     ],
                     decoration: textInputDecoration.copyWith(
                       hintText: 'Enter App Name',
-                      labelText: "Social"
+                      labelText: 'Social'
                     ),
                     onChanged: (text){
                       setState(() {
@@ -224,7 +228,7 @@ class _UserDetailFormState extends State<UserDetailForm> {
                   ),
                   ///change to a combobox later
                   FormBuilderTextField(
-                  attribute: "username",
+                  attribute: 'username',
                   validators: [
                     FormBuilderValidators.minLength(3),
                     FormBuilderValidators.required()
@@ -239,8 +243,8 @@ class _UserDetailFormState extends State<UserDetailForm> {
                   },
                   ),
                   FormBuilderCheckbox(
-                    attribute: "permission",
-                    label: Text("Permission"),
+                    attribute: 'permission',
+                    label: Text('Permission'),
                     onChanged: (text){
                       setState(() {
                         permission = text;
@@ -256,20 +260,18 @@ class _UserDetailFormState extends State<UserDetailForm> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text("Cancel")
+              child: Text('Cancel')
             ),
             FlatButton(onPressed: (){
               if (_formKey.currentState.validate()){
                 Navigator.of(context).pop();
-                Social newSocial = Social(app,
+                var newSocial = Social(app,
                  username: username, permission: permission);
-                if (user.socials== null){
-                  user.socials = List<Social>();
-                }
+                user.socials ??= <Social>[];
                 user.socials.add(newSocial);
               }
               callback();
-            }, child: Text("Add")),
+            }, child: Text('Add')),
           ],
         );  
       }

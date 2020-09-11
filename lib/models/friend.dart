@@ -5,16 +5,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Friend {
 
+  Friend(this.name, {this.bio,this.when,this.where,this.reference});
   String name;
   String bio;
   String where;
   Timestamp when;
 
   DocumentReference reference;
-  Friend(this.name, {this.bio,this.when,this.where,this.reference});
-
+  
   factory Friend.fromSnapshot(DocumentSnapshot snapshot){
-    Friend newFriend = Friend.fromJson(snapshot.data);
+    var newFriend = Friend.fromJson(snapshot.data);
     newFriend.reference = snapshot.reference;
     return newFriend;
   }
@@ -23,7 +23,7 @@ class Friend {
 
   Map<String, dynamic> toJson() => _friendToJson(this);
   @override
-  String toString() => "Friend<$name>";
+  String toString() => 'Friend<$name>';
 
 }
 
