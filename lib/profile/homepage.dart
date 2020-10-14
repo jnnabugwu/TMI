@@ -99,11 +99,8 @@ class _HomeListState extends State<HomeList> {
           onTap: () {
           void _navigate(BuildContext context)  {
               Navigator.push(
-                
                   context,
                   MaterialPageRoute(
-                    // builder: (context) => PetDetails(),
-                     // TODO add pet
                      builder: (context) => ProfilePage(user),
                   ));
             }

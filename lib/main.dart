@@ -15,6 +15,8 @@ import 'package:tmi/locations/locations.dart' as locations;
 import 'package:google_maps_webservice/geocoding.dart';
 import 'package:google_maps_webservice/geolocation.dart';
 import 'package:google_maps_webservice/places.dart';
+import 'package:tmi/profile/tmisocials.dart';
+
 
 
 void main() => runApp(MyApp());

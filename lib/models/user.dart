@@ -17,7 +17,7 @@ class User {
     return newUser;
   }
 
-  factory User.fromJson(Map<String, dynamic> json) => _userFromJson(json);
+  factory User.fromJson(Map<String, dynamic> json) => _UserFromJson(json);
 
   Map<String, dynamic> toJson() => _userToJson(this);
   @override
@@ -25,7 +25,7 @@ class User {
 
 }
 
-User _userFromJson(Map<String, dynamic> json){
+User _UserFromJson(Map<String, dynamic> json){
   return User(
     json['name'] as String,
     bio :json['bio'] as String,

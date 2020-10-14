@@ -2,12 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tmi/models/friend.dart';
 import 'package:tmi/respository/dataRepository.dart';
+import 'friendpage.dart';
 import 'friendrequestlist.dart';
 
 const BoldStyle = TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold); 
 
 class FriendsList extends StatefulWidget {
-  const FriendsList(this.id, {PageStorageKey<String> key});
+  const FriendsList(this.id);
   final String id;
   @override
   _FriendsListState createState() => _FriendsListState();
@@ -49,6 +50,7 @@ class _FriendsListState extends State<FriendsList> {
         title: Text('Friends List')
       ),
       body: ListView(
+        shrinkWrap: true,
         children: <Widget>[
           Row(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -66,11 +68,12 @@ class _FriendsListState extends State<FriendsList> {
           _navigate(context);
             },
             ),
+            
           StreamBuilder<QuerySnapshot>(
           stream: repository.getFriendStream(widget.id),
           builder: (context, snapshot)
           {
-            if(!snapshot.hasData) return LinearProgressIndicator();
+            if(!snapshot.hasData) return Container(child: Text('blank'),);
             return _buildList(context, snapshot.data.documents);
           }
         ),
@@ -82,6 +85,7 @@ class _FriendsListState extends State<FriendsList> {
   }  
   Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot){
     return ListView(
+      shrinkWrap: true,
       padding: const EdgeInsets.only(top: 20.0),
       children: snapshot.map((data) => _buildListItem(context, data)).toList(),
       );
@@ -141,7 +145,14 @@ class _FriendsListState extends State<FriendsList> {
           onTap: () {
             print('hello');
             ///Create a Profile page that takes a user or a friend and populates it. OR a connection page 
-            
+              void _navigate(BuildContext context)  {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                     builder: (context) => FriendPage(friend),
+                  ));
+            }
+            _navigate(context);
           }
       ),
     

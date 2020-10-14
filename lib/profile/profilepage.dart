@@ -3,12 +3,14 @@ import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:tmi/models/tmibutton.dart';
 import 'package:tmi/models/user.dart';
 import 'package:tmi/profile/friendslist.dart';
 import 'package:tmi/respository/dataRepository.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tmi/profile/userDetails.dart';
-import 'package:tmi/models/bottomnavi.dart';
+import 'package:tmi/models/social.dart';
+import 'tmisocials.dart';
 
 class ProfilePage extends StatelessWidget{
 
@@ -94,7 +96,10 @@ class ProfilePage extends StatelessWidget{
             ),
             ),
           ),
-        _interests
+        _interests,
+
+        SocialDisplay(user.reference.documentID.toString())
+        
         ],)
       ]
     ),
@@ -104,6 +109,85 @@ class ProfilePage extends StatelessWidget{
   }
   
 }
+
+///Create a list of social cards from snapshots of the user's social database. 
+class SocialDisplay extends StatefulWidget {
+  SocialDisplay(this.id);
+  final String id;
+  @override
+  _SocialDisplayState createState() => _SocialDisplayState();
+}
+
+class _SocialDisplayState extends State<SocialDisplay> {
+  final DataRepository socialRepository = DataRepository();
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: 
+      StreamBuilder<QuerySnapshot>(stream: socialRepository.getSocialStream(widget.id), builder: (context, snapshot){
+        if(!snapshot.hasData) return Container(child: Text('Blank'));
+        return _buildList(context, snapshot.data.documents);
+      }
+      )
+    );
+  }
+
+
+
+  Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot){
+  return ListView(
+    shrinkWrap: true,
+    padding: const EdgeInsets.only(top: 20.0),
+    children: snapshot.map((data) => _buildListItem(context, data)).toList(),   
+               );
+}
+///Lets take this _friendsocial outside of the area 
+  Widget _buildListItem(BuildContext context, DocumentSnapshot snapshot)  {
+      final social = Social.fromSnapshot(snapshot);
+      ///Below is a querysnapshot use then in it
+      // String _friendSocialName;
+      // await _friendSocial.then((value) => value.documents.forEach((element) {
+      //   setState(() {
+      //     _friendSocialName = element.data['username'];
+      //   });
+      // }));
+      if(social == null){
+        return Container();
+      }
+
+            return Container(
+              ///create a card that holds the TMIuserbutton
+              ///Displays the app name from document snapshot 
+              child: Card(
+                child: Row(
+                 mainAxisAlignment: MainAxisAlignment.center, 
+                  children:
+                [
+                  Text(social.app),
+                  ///Changed to passing social instead the app name  
+                  TMIUserButton(user_social: social, id: widget.id),
+                  // RaisedButton(onPressed: () => 
+                  //   // print(socialRepository.searchSocial(widget.id, social.app))
+                  //   //fIGURUE OUT A WAY TO MAKE THIS WORK. 
+                  
+                   
+            
+                  //         ),
+                        ]
+                        ),
+                      ),
+                    );
+              
+              }
+              
+                
+  
+
+  
+
+}
+
+
 
 //TODO: Create a Button to switch between states 
 

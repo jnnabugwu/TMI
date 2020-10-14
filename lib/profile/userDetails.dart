@@ -106,19 +106,19 @@ class _UserDetailFormState extends State<UserDetailForm> {
                 builder: (FormFieldState<dynamic> field) {
                   return Column(
                     children: <Widget>[
-                      SizedBox(height: 6.0),
+                      SizedBox(height: 3.0),
                       Text(
                         'Socials',
                         style: TextStyle(fontSize: 16.0),
                       ),
                       ConstrainedBox(
                         constraints: BoxConstraints(maxHeight: 200),
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          padding: EdgeInsets.all(16.0),
-                          itemCount: widget.user.socials == null ? 0 : widget.user.socials.length, 
-                          itemBuilder: (BuildContext context, int index) {
-                            return buildRow(widget.user.socials[index]); 
+                    child: ListView.builder(
+                    shrinkWrap: true,
+                    padding: EdgeInsets.all(16.0),
+                    itemCount: widget.user.socials == null ? 0 : widget.user.socials.length, 
+                    itemBuilder: (BuildContext context, int index) {
+                    return buildRow(widget.user.socials[index]); 
                           },
                         ),
                       ),
@@ -183,13 +183,6 @@ class _UserDetailFormState extends State<UserDetailForm> {
           child: Text(social.app),
         ),
         Text(social.username),
-        Checkbox(
-          /// social.permission ?? false is the same ass social.permission == null ? false : social.permission
-          value: social.permission ?? false,
-          onChanged: (newValue){
-            social.permission = newValue;
-          }
-        )
       ],
     );
   }
@@ -266,7 +259,7 @@ class _UserDetailFormState extends State<UserDetailForm> {
               if (_formKey.currentState.validate()){
                 Navigator.of(context).pop();
                 var newSocial = Social(app,
-                 username: username, permission: permission);
+                 username: username);
                 user.socials ??= <Social>[];
                 user.socials.add(newSocial);
               }

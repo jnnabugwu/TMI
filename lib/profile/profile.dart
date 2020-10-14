@@ -35,7 +35,7 @@ final Widget _interests = Row(
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: new AppBar(
-          title: new Text("Profile"),
+          title: new Text('Profile'),
         ),
         body:
        ListView(
