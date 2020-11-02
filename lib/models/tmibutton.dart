@@ -63,7 +63,7 @@ class _TMIUserButtonState extends State<TMIUserButton> {
         ///Create a stream of Social Requests 
         Expanded(
           child: StreamBuilder<QuerySnapshot>(
-            stream: socialRepository.getSocialRequestStream(widget.id),
+            stream: socialRepository.getSocialRequestStream(widget.id,widget.user_social.app),
             builder: (context, snapshot){
               if(!snapshot.hasData) return Container(child: Text('All caught up'));
               return _buildList(context, snapshot.data.documents);
@@ -96,7 +96,6 @@ class _TMIUserButtonState extends State<TMIUserButton> {
 
     Widget _buildListItem(BuildContext context, DocumentSnapshot snapshot){
       final friend_social = Social.fromSnapshot(snapshot);
-      final friendId = friend_social.reference.toString();
       ///what does this item have? 
       ///answer: a social request 
       ///the person's name and two iconbuttons accept and reject 
@@ -110,22 +109,14 @@ class _TMIUserButtonState extends State<TMIUserButton> {
             children:[
               ///need to have name of person here can problably pull from reference. 
               Text(friend_social.name),
-              RaisedButton.icon(onPressed: () => socialRepository.shareSocials(widget.id, friendId, widget.user_social, friend_social), icon: Icon(Icons.check), label: Text('Accept')),
-              RaisedButton.icon(onPressed: null, icon: Icon(Icons.not_interested), label: Text('Reject'))
-
+              RaisedButton.icon(onPressed: () => socialRepository.shareSocials(widget.id, friend_social.id, widget.user_social, friend_social), icon: Icon(Icons.check), label: Text('Accept')),
+              RaisedButton.icon(onPressed: () => print('reject ' + friend_social.id), icon: Icon(Icons.not_interested), label: Text('Reject'))
             ]
           )        ),
       );
 
     }
 
-
-    Future<void> acceptSocialRequest(Social app, String id) async {
-     
-    // var friendUsername = await  getFriendSocialName(friendSocial);
-    ///1. Get Friends Username and put under User.friend{app:username}
-    ///2. Put User's username and put under Friend.User{app:username}
-            }
         
     Future<String> getFriendSocialName(QuerySnapshot friendSocial) async {
       await friendSocial.documents.forEach((element) {
@@ -158,19 +149,4 @@ class _TMIFriendButtonState extends State<TMIFriendButton> {
         
           void _onButtonPressed() {
   }
-    void _sendSocialRequest(User sender, User receiver, ) async {
-                //check if user exist(Is this necessary. planning on it not)
-                // if not then send an alert message saying user doesnt exist 
-                // if it does exists then give alert saying friend request sent 
-                //In users, given a specific uid go to that document, 
-                //then create friendsrequest collection, 
-                //then set the uid as the title of the document
-                //place friend data in friend request.   
-                var _recieverId = receiver.reference.toString(); 
-                var _senderId = sender.reference.toString(); 
-///              await collection.document(senderId).collection('friendrequest').document(recieverId).setData(
-///                friendata
-///              ).then((_) => print('success')); 
-                // sender.socials[];
-              }
 }

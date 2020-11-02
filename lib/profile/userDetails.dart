@@ -64,113 +64,96 @@ class _UserDetailFormState extends State<UserDetailForm> {
   Widget build(BuildContext context){
     return Container(
       padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-      child: FormBuilder(
-        key: _formKey,
-        autovalidate: true,
-        child: Column(
-          children: <Widget>[
+      child: SingleChildScrollView(
+              child: FormBuilder(
+          key: _formKey,
+          autovalidate: true,
+          child: Column(
+            children: <Widget>[
             SizedBox(height: 20.0),
             FormBuilderTextField(
-              attribute: 'name',
-              initialValue: widget.user.name,
+              attribute: 'bio',
+              initialValue: widget.user.bio,
               decoration: textInputDecoration.copyWith(
-                hintText: 'Name', labelText: 'Name'),
-              validators: [
-                FormBuilderValidators.minLength(1),
-                FormBuilderValidators.required()
-              ],
+                hintText: 'Bio', labelText: 'Bio'
+              ),
               onChanged: (val){
                 setState(() {
-                  name = val;
+                  bio = val;
                 });
-              }
-              ,
+              },
             ),
-          SizedBox(height: 20.0),
-          FormBuilderTextField(
-            attribute: 'bio',
-            initialValue: widget.user.bio,
-            decoration: textInputDecoration.copyWith(
-              hintText: 'Bio', labelText: 'Bio'
-            ),
-            onChanged: (val){
-              setState(() {
-                bio = val;
-              });
-            },
-          ),
-            FormBuilderCustomField(
-              attribute: 'socials',
-              formField: FormField(
-                enabled: true,
-                builder: (FormFieldState<dynamic> field) {
-                  return Column(
-                    children: <Widget>[
-                      SizedBox(height: 3.0),
-                      Text(
-                        'Socials',
-                        style: TextStyle(fontSize: 16.0),
-                      ),
-                      ConstrainedBox(
-                        constraints: BoxConstraints(maxHeight: 200),
-                    child: ListView.builder(
-                    shrinkWrap: true,
-                    padding: EdgeInsets.all(16.0),
-                    itemCount: widget.user.socials == null ? 0 : widget.user.socials.length, 
-                    itemBuilder: (BuildContext context, int index) {
-                    return buildRow(widget.user.socials[index]); 
-                          },
+              FormBuilderCustomField(
+                attribute: 'socials',
+                formField: FormField(
+                  enabled: true,
+                  builder: (FormFieldState<dynamic> field) {
+                    return Column(
+                      children: <Widget>[
+                        SizedBox(height: 3.0),
+                        Text(
+                          'Socials',
+                          style: TextStyle(fontSize: 16.0),
                         ),
-                      ),
-                    ],
-                  );
-                },
-              ),
-            ),
-          FloatingActionButton(
-            onPressed: (){
-              _addSocial(widget.user ,(){
-                setState(() {   
-                                 
-                });
-              });
-            },
-            tooltip: 'Add Social',
-            child: Icon(Icons.add),
-          ),
-          SizedBox(height: 20.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              MaterialButton(
-                color: Colors.blue.shade600,
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text(
-                  'Cancel',
-                  style: TextStyle(color: Colors.white, fontSize: 12.0), 
-                )),
-              MaterialButton(
-                color: Colors.blue.shade600,
-                onPressed: () async {
-                  if(_formKey.currentState.validate()){
-                    Navigator.of(context).pop();
-                    widget.user.name = name;
-                    widget.user.bio = bio;
-                    repository.updateUser(widget.user);
-                  }
-                },
-                child: Text(
-                  'Update',
-                  style: TextStyle(color: Colors.white, fontSize:12.0),
+                        ConstrainedBox(
+                          constraints: BoxConstraints(maxHeight: 200),
+                      child: ListView.builder(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.all(16.0),
+                      itemCount: widget.user.socials == null ? 0 : widget.user.socials.length, 
+                      itemBuilder: (BuildContext context, int index) {
+                      return buildRow(widget.user.socials[index]); 
+                            },
+                          ),
+                        ),
+                      ],
+                    );
+                  },
                 ),
-              )
+              ),
+            FloatingActionButton(
+              onPressed: (){
+                _addSocial(widget.user ,(){
+                  setState(() {   
+                                   
+                  });
+                });
+              },
+              tooltip: 'Add Social',
+              child: Icon(Icons.add),
+            ),
+            SizedBox(height: 20.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                MaterialButton(
+                  color: Colors.blue.shade600,
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    'Cancel',
+                    style: TextStyle(color: Colors.white, fontSize: 12.0), 
+                  )),
+                MaterialButton(
+                  color: Colors.blue.shade600,
+                  onPressed: () async {
+                    if(_formKey.currentState.validate()){ 
+                      await repository.updateUser(widget.user,'bio', bio);
+                      Navigator.of(context).pop();                    
+                    }
+                  },
+                  child: Text(
+                    'Update',
+                    style: TextStyle(color: Colors.white, fontSize:12.0),
+                  ),
+                )
+              ]
+            )          
             ]
-          )          
-          ]
   )
-  )
+  ),
+      )
   );
   }
 
@@ -190,7 +173,6 @@ class _UserDetailFormState extends State<UserDetailForm> {
   void _addSocial(User user, DialogCallback callback){
     String app;
     String username;
-    var permission = false;
     final _formKey = GlobalKey<FormBuilderState>();
     showDialog(
       context: context,
@@ -201,50 +183,43 @@ class _UserDetailFormState extends State<UserDetailForm> {
             child: FormBuilder(
               key: _formKey,
               autovalidate: true,
-              child: Column(
-                children: <Widget>[
-                  FormBuilderTextField(
-                    attribute: 'App',
+              child: Expanded(
+                              child: Column(
+                  children: <Widget>[
+                    FormBuilderTextField(
+                      attribute: 'App',
+                      validators: [
+                        FormBuilderValidators.minLength(1),
+                        FormBuilderValidators.required()
+                      ],
+                      decoration: textInputDecoration.copyWith(
+                        hintText: 'Enter App Name',
+                        labelText: 'Social'
+                      ),
+                      onChanged: (text){
+                        setState(() {
+                          app = text;
+                        });
+                      },
+                    ),
+                    ///change to a combobox later
+                    FormBuilderTextField(
+                    attribute: 'username',
                     validators: [
-                      FormBuilderValidators.minLength(1),
+                      FormBuilderValidators.minLength(3),
                       FormBuilderValidators.required()
                     ],
                     decoration: textInputDecoration.copyWith(
-                      hintText: 'Enter App Name',
-                      labelText: 'Social'
+                      hintText: 'Enter username',
+                      labelText: 'Username'),
+                    onChanged: (text){
+                      setState(() {
+                        username = text;
+                      });
+                    },
                     ),
-                    onChanged: (text){
-                      setState(() {
-                        app = text;
-                      });
-                    },
-                  ),
-                  ///change to a combobox later
-                  FormBuilderTextField(
-                  attribute: 'username',
-                  validators: [
-                    FormBuilderValidators.minLength(3),
-                    FormBuilderValidators.required()
-                  ],
-                  decoration: textInputDecoration.copyWith(
-                    hintText: 'Enter username',
-                    labelText: 'Username'),
-                  onChanged: (text){
-                    setState(() {
-                      username = text;
-                    });
-                  },
-                  ),
-                  FormBuilderCheckbox(
-                    attribute: 'permission',
-                    label: Text('Permission'),
-                    onChanged: (text){
-                      setState(() {
-                        permission = text;
-                      });
-                    },
-                  )
-                ]
+                  ]
+                ),
               ),
             ),
           ),

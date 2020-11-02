@@ -1,5 +1,3 @@
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tmi/models/social.dart';
 import 'package:tmi/models/user.dart';
@@ -18,8 +16,12 @@ class DataRepository {
     //when we set Unique id's we will change this. 
   }
 
-  updateUser(User user) async {
-    await collection.document(user.reference.documentID).updateData(user.toJson());
+    void updateUser(User user, String field, dynamic change) async {
+    await collection.document(user.reference.documentID).updateData(
+      {
+        field: change
+      }
+    );
   }
   ///FRIEND Request STREAMS
     Stream<QuerySnapshot> getFriendRequestStream(String id) {
@@ -39,6 +41,12 @@ class DataRepository {
     
   }
 
+    Future<DocumentReference> addSocialRequest(String userId, Social friendSocial){
+      ///Adds the friend's social information puts a social request to the User's social requests list
+      ///needs friend's social and user's id 
+      return collection.document(userId).collection('social_requests').add(friendSocial.toJson());    
+    } 
+
   ///Friend Stream 
       Stream<QuerySnapshot> getFriendStream(String id) {
     return collection.document(id).collection('friends_list').snapshots();
@@ -49,8 +57,8 @@ class DataRepository {
        return collection.document(id).collection('socials').snapshots();
      }
 
-    Stream<QuerySnapshot> getSocialRequestStream(String id){
-      return collection.document(id).collection('social_request').snapshots();
+    Stream<QuerySnapshot> getSocialRequestStream(String id, String appName){
+      return collection.document(id).collection('social_request').where('app', isEqualTo: appName).snapshots();
     }
 
     Future<DocumentReference> deletleSocialRequest(String id, String friendid){
@@ -72,7 +80,7 @@ class DataRepository {
         ///Go to the friends documents then copy their social media data. 
         ///Query??? the app name in the firends socials then copy the data. 
         {
-          user_app.app : user_app.username
+          user_app.app: user_app.username
         }
       );
       return deletleSocialRequest(id, friendId);

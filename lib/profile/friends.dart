@@ -17,16 +17,15 @@ import 'package:geolocator/geolocator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tmi/models/friend.dart';
 
-
-class FriendPage extends StatefulWidget{
-  FriendPage({Key key}) : super(key: key);
+class NewFriendPage extends StatefulWidget{
+  NewFriendPage({Key key}) : super(key: key);
 
   @override 
-  _FriendPageState createState() => _FriendPageState();
+  _NewFriendPageState createState() => _NewFriendPageState();
   
 }
 
-class _FriendPageState extends State<FriendPage> {
+class _NewFriendPageState extends State<NewFriendPage> {
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
   final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
   TextEditingController friendidcontroller;
@@ -35,14 +34,25 @@ class _FriendPageState extends State<FriendPage> {
   String _currentCity;
   final CollectionReference collection = Firestore.instance.collection('users');
   final Map<String,dynamic> friendata = <String,dynamic>{};
-
-
+  
+  int _value = 1;
+  final Map<String,List> locations = <String,List>{};
+  
+                
+  
   @override
   void initState(){
     _getCurrentLocation();
     _getAddressFromLatLng().then((value){
       print('Async done');
-    });
+      locations['st.pete'] = [27.705010, -82.651163];
+      locations['baltimore'] = [39.290386, -76.612190];
+      locations['DC'] = [38.900497, -77.007507];
+      locations['Atlanta'] = [33.748997, -84.387985];
+    }
+    
+    
+    );
     super.initState();
   }
   
@@ -58,12 +68,46 @@ class _FriendPageState extends State<FriendPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             
+            DropdownButton(
+              value: _value,
+              items: [
+                DropdownMenuItem(
+                  child: Text('St.Pete'),
+                  value: 1,
+                ),
+                DropdownMenuItem(
+                  child: Text('Baltimore'),
+                  value: 2,
+                ),
+                DropdownMenuItem(
+                  child: Text('Washington'),
+                  value: 3,
+                ),
+                DropdownMenuItem(
+                  child: Text('Atlanta'),
+                  value: 4,
+                )
+              ],
+              onChanged: (value){
+                setState((){
+                _value = value; 
+                });
+              }
+              ),
+
             FlatButton(onPressed: (){
               _getCurrentLocation();
               debugPrint('currentaddress: $_currentAddress');
               print(_currentCity);
                           }, 
                       child: Text('Get location')),
+            FlatButton(onPressed: () {
+              if(_currentPosition == null){
+                print('blank');
+              }
+              _getAddress(locations);
+            } 
+            , child: Text('click this afterwards')),
             RaisedButton(onPressed: (){
               _findUser('MeNG1QLuZcYBurrpvC55');
                           },
@@ -142,7 +186,18 @@ class _FriendPageState extends State<FriendPage> {
                 friendata
               ).then((_) => print('success'));              
               }
-              
+                // void _getAddress(Map<String,List> placemarks, value) async {
+                // // ignore: omit_local_variable_types
+ 
+                // if (placemarks != null && placemarks.isNotEmpty) {
+                //   // ignore: omit_local_variable_types
+                //   // lets us the placemarks[value] = coordinates
+                //   // pass coordinates to geolocater. 
+                //   // final Placemark pos = placemarks[0];
+                //   print(pos.thoroughfare + ', ' + pos.locality);
+                //   }
+                  ///Next place locations in hte drop down then do friend sharing to complete the geocoding 
+  }
 
               }
         

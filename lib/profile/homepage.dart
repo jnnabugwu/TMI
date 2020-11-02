@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:tmi/profile/friends.dart';
 import 'package:tmi/respository/dataRepository.dart';
 import 'package:tmi/models/user.dart';
 import 'package:tmi/profile/profilepage.dart';
@@ -27,6 +28,19 @@ class _HomeListState extends State<HomeList> {
     return Scaffold(
       appBar: AppBar(
         title: Text('TMI User'),
+        centerTitle: true,
+        leading: IconButton(icon: Icon(Icons.person_add), onPressed: (){
+        void _gotoFriendRequest(BuildContext context){
+          Navigator.push(context,
+          MaterialPageRoute(builder: 
+          (context) => NewFriendPage()
+          )
+          );
+        };
+        _gotoFriendRequest(context);
+        }
+        
+        ),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: repository.getStream(),
@@ -96,7 +110,7 @@ class _HomeListState extends State<HomeList> {
                // TODO Add pet type
             ],
           ),
-          onTap: () {
+          onLongPress: () {
           void _navigate(BuildContext context)  {
               Navigator.push(
                   context,
@@ -104,9 +118,17 @@ class _HomeListState extends State<HomeList> {
                      builder: (context) => ProfilePage(user),
                   ));
             }
-
             _navigate(context);      
           },
+          onTap: () {
+            void _userSetup(BuildContext context) {
+              Navigator.push(context, 
+              MaterialPageRoute(builder: (context) => UserDetails(user))
+              );
+            }
+            _userSetup(context);
+          }
+          ,
           highlightColor: Colors.green,
           splashColor: Colors.blue,
         ));

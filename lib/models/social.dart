@@ -11,10 +11,11 @@ class Social {
     newSocial.reference = snapshot.reference;
     return newSocial;
   }
-  Social(this.app,{this.username,this.name,this.reference});
+  Social(this.app,{this.username,this.name,this.id,this.reference});
   String app;
   String username;
-  String name; 
+  String name;
+  String id;  
 
   DocumentReference reference;
   
@@ -30,7 +31,8 @@ Social _socialFromJson(Map<dynamic, dynamic> json) {
   return Social(
     json['app'] as String,
     username: json['username'] as String,
-    name: json['name'] as String
+    name: json['name'] as String,
+    id: json['id'] as String
   );
 }
 
@@ -38,7 +40,8 @@ Map<String, dynamic> _socialToJson(Social instance) =>
   <String, dynamic> {
     'app' : instance.app,
     'username': instance.username,
-    'name': instance.name
+    'name': instance.name,
+    'id' : instance.id
   };
 
 

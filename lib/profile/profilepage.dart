@@ -84,7 +84,7 @@ class ProfilePage extends StatelessWidget{
               style: TextStyle(fontSize: 24)),
             ),
             Padding(padding: const EdgeInsets.all(8.0),
-            child: Text(user.bio,
+            child: Text(user.bio ?? '',
             maxLines: 4,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
@@ -97,8 +97,10 @@ class ProfilePage extends StatelessWidget{
             ),
           ),
         _interests,
+         
+        SocialDisplay(user.reference.documentID.toString()),
 
-        SocialDisplay(user.reference.documentID.toString())
+        // Text(user.reference.documentID.toString())
         
         ],)
       ]
@@ -120,6 +122,7 @@ class SocialDisplay extends StatefulWidget {
 
 class _SocialDisplayState extends State<SocialDisplay> {
   final DataRepository socialRepository = DataRepository();
+  
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -152,7 +155,7 @@ class _SocialDisplayState extends State<SocialDisplay> {
       //   });
       // }));
       if(social == null){
-        return Container();
+        return Container(child:Text('Something went wrong'));
       }
 
             return Container(
@@ -163,7 +166,7 @@ class _SocialDisplayState extends State<SocialDisplay> {
                  mainAxisAlignment: MainAxisAlignment.center, 
                   children:
                 [
-                  Text(social.app),
+                  // Text(social.app),
                   ///Changed to passing social instead the app name  
                   TMIUserButton(user_social: social, id: widget.id),
                   // RaisedButton(onPressed: () => 
@@ -171,8 +174,7 @@ class _SocialDisplayState extends State<SocialDisplay> {
                   //   //fIGURUE OUT A WAY TO MAKE THIS WORK. 
                   
                    
-            
-                  //         ),
+                            //         ),
                         ]
                         ),
                       ),
