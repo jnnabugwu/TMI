@@ -199,6 +199,6 @@ class _NewFriendPageState extends State<NewFriendPage> {
                   ///Next place locations in hte drop down then do friend sharing to complete the geocoding 
   }
 
-              }
+              
         
               
